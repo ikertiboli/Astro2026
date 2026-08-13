@@ -9,30 +9,46 @@
   <body>
     <main class="container">
       <header class="header">
+        <p class="kicker">Sesión nocturna</p>
         <h1>Astro2026</h1>
         <p class="subtitle">Control remoto de cámara astronómica</p>
       </header>
 
       <section class="status-card" aria-live="polite">
         <span class="status-dot" id="camera-status-dot"></span>
-        <p id="camera-status-text">Comprobando estado de cámara…</p>
+        <div class="status-copy">
+          <p class="status-label">Estado de cámara</p>
+          <p id="camera-status-text">Comprobando estado de cámara…</p>
+        </div>
       </section>
 
       <section class="controls-card">
-        <label for="iso-select">ISO</label>
-        <select id="iso-select"></select>
+        <h2>Parámetros de captura</h2>
+        <div class="control-grid">
+          <label for="iso-select">
+            <span>ISO</span>
+            <select id="iso-select"></select>
+          </label>
 
-        <label for="aperture-select">Apertura</label>
-        <select id="aperture-select"></select>
+          <label for="aperture-select">
+            <span>Apertura</span>
+            <select id="aperture-select"></select>
+          </label>
 
-        <label for="shutter-select">Velocidad</label>
-        <select id="shutter-select"></select>
+          <label for="shutter-select">
+            <span>Velocidad</span>
+            <select id="shutter-select"></select>
+          </label>
+        </div>
 
         <button id="capture-btn" type="button">Capturar</button>
       </section>
 
       <section class="preview-card">
-        <h2>Última foto</h2>
+        <div class="preview-head">
+          <h2>Última foto</h2>
+          <p class="preview-hint">Previsualización instantánea</p>
+        </div>
         <img
           id="last-photo-thumb"
           alt="Miniatura de la última foto"
