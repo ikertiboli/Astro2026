@@ -84,22 +84,23 @@ body {
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 50%;
-  background: var(--muted);
+  color: var(--muted);
+  background: currentColor;
   margin-top: 0.28rem;
   flex-shrink: 0;
   box-shadow: 0 0 0.65rem currentColor;
 }
 
 .status-dot.online {
-  background: var(--ok);
+  color: var(--ok);
 }
 
 .status-dot.offline {
-  background: var(--error);
+  color: var(--error);
 }
 
 .status-dot.warning {
-  background: var(--warning);
+  color: var(--warning);
 }
 
 .status-copy {
