@@ -113,11 +113,6 @@ function startAutoRefresh() {
   }
 
   autoRefreshIntervalId = window.setInterval(runAutoRefresh, AUTO_REFRESH_MS);
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) {
-      runAutoRefresh();
-    }
-  });
 }
 
 async function capture() {
@@ -163,5 +158,10 @@ async function capture() {
 }
 
 captureButton.addEventListener("click", capture);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    runAutoRefresh();
+  }
+});
 
 Promise.allSettled([loadSettings(), loadLastPhoto(true)]).then(startAutoRefresh);
