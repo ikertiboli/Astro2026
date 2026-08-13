@@ -6,6 +6,10 @@ const shutterSelect = document.getElementById("shutter-select");
 const captureButton = document.getElementById("capture-btn");
 const lastPhotoThumb = document.getElementById("last-photo-thumb");
 const lastPhotoEmpty = document.getElementById("last-photo-empty");
+const AUTO_REFRESH_MS = 10000;
+let isCaptureInProgress = false;
+let isAutoRefreshing = false;
+let autoRefreshIntervalId = null;
 
 function setCameraStatus(status, text) {
   cameraStatusDot.classList.remove("online", "offline", "warning");
@@ -14,6 +18,7 @@ function setCameraStatus(status, text) {
 }
 
 function fillSelect(selectElement, values) {
+  const previousValue = selectElement.value;
   selectElement.innerHTML = "";
 
   if (!Array.isArray(values) || values.length === 0) {
@@ -30,11 +35,20 @@ function fillSelect(selectElement, values) {
     option.textContent = value;
     selectElement.appendChild(option);
   });
+
+  if (values.includes(previousValue)) {
+    selectElement.value = previousValue;
+  }
 }
 
-function setPreview(imageUrl) {
+function withCacheBuster(url) {
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}t=${Date.now()}`;
+}
+
+function setPreview(imageUrl, forceFresh = false) {
   if (imageUrl) {
-    lastPhotoThumb.src = imageUrl;
+    lastPhotoThumb.src = forceFresh ? withCacheBuster(imageUrl) : imageUrl;
     lastPhotoThumb.hidden = false;
     lastPhotoEmpty.hidden = true;
     return;
@@ -66,7 +80,7 @@ async function loadSettings() {
   }
 }
 
-async function loadLastPhoto() {
+async function loadLastPhoto(forceFresh = false) {
   try {
     const response = await fetch("/api/last-photo");
     if (!response.ok) {
@@ -74,13 +88,40 @@ async function loadLastPhoto() {
     }
 
     const data = await response.json();
-    setPreview(data.thumbnail_url || "");
+    setPreview(data.thumbnail_url || "", forceFresh);
   } catch (error) {
     setPreview("");
   }
 }
 
+async function runAutoRefresh() {
+  if (isCaptureInProgress || isAutoRefreshing || document.hidden) {
+    return;
+  }
+
+  isAutoRefreshing = true;
+  try {
+    await Promise.allSettled([loadSettings(), loadLastPhoto(true)]);
+  } finally {
+    isAutoRefreshing = false;
+  }
+}
+
+function startAutoRefresh() {
+  if (autoRefreshIntervalId !== null) {
+    return;
+  }
+
+  autoRefreshIntervalId = window.setInterval(runAutoRefresh, AUTO_REFRESH_MS);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      runAutoRefresh();
+    }
+  });
+}
+
 async function capture() {
+  isCaptureInProgress = true;
   captureButton.disabled = true;
   setCameraStatus("online", "Capturando fotografía…");
 
@@ -111,16 +152,16 @@ async function capture() {
     }
 
     const captureData = await captureResponse.json();
-    setPreview(captureData.thumbnail_url || "");
+    setPreview(captureData.thumbnail_url || "", true);
     setCameraStatus("online", "Foto capturada correctamente");
   } catch (error) {
     setCameraStatus("warning", "Error durante la captura");
   } finally {
+    isCaptureInProgress = false;
     captureButton.disabled = false;
   }
 }
 
 captureButton.addEventListener("click", capture);
 
-loadSettings();
-loadLastPhoto();
+Promise.allSettled([loadSettings(), loadLastPhoto(true)]).then(startAutoRefresh);
