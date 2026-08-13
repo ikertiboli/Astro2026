@@ -1,0 +1,14 @@
+# Servicio systemd para iniciar Astro2026 automáticamente.
+[Unit]
+Description=Astro2026 Remote Camera Control
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/Astro2026
+ExecStart=/usr/bin/python3 /home/pi/Astro2026/app.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
