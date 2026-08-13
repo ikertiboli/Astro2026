@@ -7,9 +7,9 @@ const captureButton = document.getElementById("capture-btn");
 const lastPhotoThumb = document.getElementById("last-photo-thumb");
 const lastPhotoEmpty = document.getElementById("last-photo-empty");
 
-function setCameraStatus(online, text) {
-  cameraStatusDot.classList.remove("online", "offline");
-  cameraStatusDot.classList.add(online ? "online" : "offline");
+function setCameraStatus(status, text) {
+  cameraStatusDot.classList.remove("online", "offline", "warning");
+  cameraStatusDot.classList.add(status);
   cameraStatusText.textContent = text;
 }
 
@@ -57,12 +57,12 @@ async function loadSettings() {
     fillSelect(isoSelect, settings.iso);
     fillSelect(apertureSelect, settings.apertures);
     fillSelect(shutterSelect, settings.shutter_speeds);
-    setCameraStatus(true, "Cámara conectada");
+    setCameraStatus("online", "Cámara conectada");
   } catch (error) {
     fillSelect(isoSelect, []);
     fillSelect(apertureSelect, []);
     fillSelect(shutterSelect, []);
-    setCameraStatus(false, "Cámara no disponible");
+    setCameraStatus("offline", "Cámara no disponible");
   }
 }
 
@@ -74,8 +74,7 @@ async function loadLastPhoto() {
     }
 
     const data = await response.json();
-    const thumbnailUrl = data.thumbnail_url || data.thumbnail || data.image_url || "";
-    setPreview(thumbnailUrl);
+    setPreview(data.thumbnail_url || "");
   } catch (error) {
     setPreview("");
   }
@@ -83,7 +82,7 @@ async function loadLastPhoto() {
 
 async function capture() {
   captureButton.disabled = true;
-  setCameraStatus(true, "Capturando fotografía…");
+  setCameraStatus("online", "Capturando fotografía…");
 
   try {
     const payload = {
@@ -112,13 +111,10 @@ async function capture() {
     }
 
     const captureData = await captureResponse.json();
-    const thumbnailUrl =
-      captureData.thumbnail_url || captureData.thumbnail || captureData.image_url || "";
-
-    setPreview(thumbnailUrl);
-    setCameraStatus(true, "Foto capturada correctamente");
+    setPreview(captureData.thumbnail_url || "");
+    setCameraStatus("online", "Foto capturada correctamente");
   } catch (error) {
-    setCameraStatus(false, "Error durante la captura");
+    setCameraStatus("warning", "Error durante la captura");
   } finally {
     captureButton.disabled = false;
   }

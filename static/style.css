@@ -72,6 +72,10 @@ body {
   background: var(--error);
 }
 
+.status-dot.warning {
+  background: #f0bf5a;
+}
+
 #camera-status-text {
   margin: 0;
   font-size: 0.95rem;
