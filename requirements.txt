@@ -1,2 +1,2 @@
-# Dependencias Python base para Astro2026.
-Flask
+# Dependencia Python necesaria para la API web.
+Flask>=2.2,<2.3
