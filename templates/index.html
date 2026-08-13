@@ -7,8 +7,42 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
-    <!-- Interfaz web principal para control remoto de la cámara -->
-    <main id="app"></main>
+    <main class="container">
+      <header class="header">
+        <h1>Astro2026</h1>
+        <p class="subtitle">Control remoto de cámara astronómica</p>
+      </header>
+
+      <section class="status-card" aria-live="polite">
+        <span class="status-dot" id="camera-status-dot"></span>
+        <p id="camera-status-text">Comprobando estado de cámara…</p>
+      </section>
+
+      <section class="controls-card">
+        <label for="iso-select">ISO</label>
+        <select id="iso-select"></select>
+
+        <label for="aperture-select">Apertura</label>
+        <select id="aperture-select"></select>
+
+        <label for="shutter-select">Velocidad</label>
+        <select id="shutter-select"></select>
+
+        <button id="capture-btn" type="button">Capturar</button>
+      </section>
+
+      <section class="preview-card">
+        <h2>Última foto</h2>
+        <img
+          id="last-photo-thumb"
+          alt="Miniatura de la última foto"
+          src=""
+          hidden
+        />
+        <p id="last-photo-empty">Aún no hay miniatura disponible.</p>
+      </section>
+    </main>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>

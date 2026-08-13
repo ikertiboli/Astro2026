@@ -1,1 +1,138 @@
-/* Estilos base para la interfaz web de Astro2026. */
+:root {
+  color-scheme: dark;
+  --bg: #050812;
+  --card: #10192b;
+  --card-border: #22324f;
+  --text: #e7edf8;
+  --muted: #9fb2d1;
+  --accent: #53a6ff;
+  --accent-hover: #3294ff;
+  --ok: #2fd08d;
+  --error: #ff5d5d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #0b1630 0%, var(--bg) 65%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container {
+  width: min(100%, 480px);
+  margin: 0 auto;
+  padding: 1rem 0.9rem 1.6rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.status-card,
+.controls-card,
+.preview-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 0.95rem;
+}
+
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status-dot {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.status-dot.online {
+  background: var(--ok);
+}
+
+.status-dot.offline {
+  background: var(--error);
+}
+
+#camera-status-text {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.controls-card {
+  display: grid;
+  gap: 0.55rem;
+}
+
+label {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+select,
+button {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #2d3f60;
+  background: #0f1a30;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+select {
+  padding: 0.72rem;
+}
+
+button {
+  margin-top: 0.4rem;
+  padding: 0.8rem;
+  font-weight: 600;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #081326;
+}
+
+button:hover,
+button:focus-visible {
+  background: var(--accent-hover);
+}
+
+button:disabled {
+  opacity: 0.55;
+}
+
+.preview-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+#last-photo-thumb {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #2d3f60;
+  display: block;
+}
+
+#last-photo-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
